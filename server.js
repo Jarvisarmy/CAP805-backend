@@ -2,8 +2,14 @@ var HTTP_PORT = process.env.PORT || 8080;
 var express = require("express");
 var app = express();
 var path = require("path");
+
+var bodyParser = require("body-parser");
+
 var dataModule = require("./modules/serverDataModule.js");
 
+
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req,res)=>{
     res.redirect("/games");
 })
