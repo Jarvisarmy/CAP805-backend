@@ -4,10 +4,11 @@ var app = express();
 var path = require("path");
 var dataModule = require("./modules/serverDataModule.js");
 
+app.get("/", (req,res)=>{
+    res.redirect("/games");
+})
 
-
-app.get("/",(req, res) => {
-    
+app.get("/games",(req, res) => {
     dataModule.getAllGames().then((data) => {
         if (data.length > 0) {
             res.json(data);
@@ -18,6 +19,14 @@ app.get("/",(req, res) => {
     .catch((err) => {
         res.json({message: "no results"});
     })
+});
+
+app.post("/games/add", (req, res) => {
+    dataModule.addGame(req.body).then(()=> {
+        res.redirect("/games");
+    }).catch(err=>{
+        res.status(500).send('Unable to add game');
+    });
 });
 
 app.use((req, res, next) => {
