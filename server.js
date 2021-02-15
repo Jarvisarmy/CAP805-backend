@@ -23,7 +23,6 @@ app.get("/games",(req, res) => {
 
 app.post("/games/add", (req, res) => {
     dataModule.addGame(req.body).then(()=> {
-        res.redirect("/games");
     }).catch(err=>{
         res.status(500).send('Unable to add game');
     });
