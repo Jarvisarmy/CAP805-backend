@@ -1,1 +1,17 @@
 the site URL is: https://guarded-anchorage-82080.herokuapp.com/
+
+Heroku postgres database info:
+Host
+ec2-54-90-13-87.compute-1.amazonaws.com
+Database
+d4tkh6ejtbp6fk
+User
+zsizxunfpcswki
+Port
+5432
+Password
+ec32e999218ebd9c5886fce0650ec789dd90627c1db7641fc9c8c76b9dcff8dd
+URI
+postgres://zsizxunfpcswki:ec32e999218ebd9c5886fce0650ec789dd90627c1db7641fc9c8c76b9dcff8dd@ec2-54-90-13-87.compute-1.amazonaws.com:5432/d4tkh6ejtbp6fk
+Heroku CLI
+heroku pg:psql postgresql-cubic-58099 --app guarded-anchorage-82080

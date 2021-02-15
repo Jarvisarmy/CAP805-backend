@@ -1,23 +1,30 @@
-var HTTP_PORT = process.env.PORT || 8080;
-var express = require("express");
-var app = express();
-var path = require("path");
-var dataModule = require("./modules/serverDataModule.js");
-
-
-
-app.get("/", (req, res) => {
-    console.log("here");
+const Sequelize = require("sequelize");
+var sequelize = new Sequelize('d4tkh6ejtbp6fk','zsizxunfpcswki','ec32e999218ebd9c5886fce0650ec789dd90627c1db7641fc9c8c76b9dcff8dd',{
+    host: 'ec2-54-90-13-87.compute-1.amazonaws.com',
+    dialect: 'postgres',
+    port: 5432,
+    dialectOptions: {
+        ssl: {rejectUnauthorized: false}
+    }
 });
-app.use((req, res, next) => {
-    res.status(404).send("Page Not Found");
+var Game = sequelize.define('Game',{
+    gameNum: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    gameName: Sequelize.STRING,
+    gameUrl: Sequelize.STRING,
+    gameDescription: Sequelize.TEXT
 });
 
-dataModule.initialize().then(() => {
-    app.listen(HTTP_PORT, () => {
-        console.log("server listening on port: " + HTTP_PORT);
+
+module.exports.initialize = function() {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(()=> {
+            resolve();
+        }).catch(err => {
+            reject('unable to sync the database');
+        });
     });
-})
-.catch((err) => {
-    console.log(err);
-})
+}
