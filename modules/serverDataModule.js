@@ -17,7 +17,34 @@ var Game = sequelize.define('Game',{
     gameUrl: Sequelize.STRING,
     gameDescription: Sequelize.TEXT
 });
+// function used to return all games
+module.exports.getAllGames = function() {
+    return new Promise((resolve, reject) => {
+        Game.findAll().then(data=> {
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=> {
+            reject('no results returned');
+        })
+    });
+}
 
+// function used to add a game
+module.exports.addGame = function(gameData) {
+    return new Promise((resolve, reject) => {
+        
+        for (let item in gameData) {
+            if (gameData[item] == "") {
+                gameData[item] = null;
+            }
+        }
+        Game.create(gameData).then(data=> {
+            resolve();
+        }).catch(err=> {
+            reject('unable to create game');
+        })
+    });
+}
 
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {

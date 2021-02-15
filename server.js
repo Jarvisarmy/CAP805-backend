@@ -4,10 +4,25 @@ var app = express();
 var path = require("path");
 var dataModule = require("./modules/serverDataModule.js");
 
-app.get("/", (req, res) => {
-    console.log("successfully set up heroku server");
+
+
+app.get("/",(req, res) => {
+    
+    dataModule.getAllGames().then((data) => {
+        if (data.length > 0) {
+            res.json(data);
+        } else {
+            res.json({message: "no results"});
+        }
+    })
+    .catch((err) => {
+        res.json({message: "no results"});
+    })
 });
 
+app.use((req, res, next) => {
+    res.status(404).send("Page Not Found");
+});
 dataModule.initialize().then(() => {
     app.listen(HTTP_PORT, () => {
         console.log("server listening on port: " + HTTP_PORT);
