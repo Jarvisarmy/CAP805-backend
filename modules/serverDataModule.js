@@ -27,7 +27,7 @@ module.exports.getAllGames = function() {
             reject('no results returned');
         })
     });
-}
+};
 
 // function used to add a game
 module.exports.addGame = function(gameData) {
@@ -44,7 +44,7 @@ module.exports.addGame = function(gameData) {
             reject('unable to create game');
         })
     });
-}
+};
 
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
@@ -54,4 +54,4 @@ module.exports.initialize = function() {
             reject('unable to sync the database');
         });
     });
-}
+};
