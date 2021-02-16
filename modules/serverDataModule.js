@@ -33,11 +33,13 @@ module.exports.getAllGames = function() {
 module.exports.addGame = function(gameData) {
     return new Promise((resolve, reject) => {
         const newGame = gameData;
+        /*
         for (let item in newGame) {
             if (newGame[item] == "") {
                 newGame[item] = null;
             }
         }
+        */
         Game.create(newGame).then(data=> {
             resolve();
         }).catch(err=> {
