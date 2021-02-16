@@ -35,7 +35,7 @@ app.get("/games",(req, res) => {
         if (data.length > 0) {
             return res.send(JSON.stringify(data));
         } else {
-            return res.send(JSON.stringify({message: "no results"}));
+            return res.send(JSON.stringify([]));
         }
     })
     .catch((err) => {
