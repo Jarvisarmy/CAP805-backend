@@ -32,7 +32,7 @@ module.exports.getAllGames = function() {
 // function used to add a game
 module.exports.addGame = function(gameData) {
     return new Promise((resolve, reject) => {
-        const newGame = gameData;
+        const newGame = JSON.parse(gameData);
         /*
         for (let item in newGame) {
             if (newGame[item] == "") {
