@@ -7,6 +7,7 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(function(req, res, next) {
     // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -25,7 +26,6 @@ app.use(function(req, res, next) {
   next();
   });
 
-app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req,res)=>{
     res.redirect("/games");
 })
