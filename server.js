@@ -18,13 +18,13 @@ app.get("/", (req,res)=>{
 app.get("/games",(req, res) => {
     dataModule.getAllGames().then((data) => {
         if (data.length > 0) {
-            return res.send(JSON.stringify(data));
+            return res.json(data);
         } else {
-            return res.send(JSON.stringify([]));
+            return res.json([]);
         }
     })
     .catch((err) => {
-        return res.send(JSON.stringify({message: "no results"}));
+        return res.json({message: "no results"});
     })
 });
 
