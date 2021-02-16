@@ -42,7 +42,6 @@ app.get("/games",(req, res) => {
 });
 
 app.post("/games/add", (req, res) => {
-    console.log(req.body);
     dataModule.addGame(req.body).then(()=> {
     }).catch(err=>{
         res.status(500).send('Unable to add game');
