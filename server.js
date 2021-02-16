@@ -6,10 +6,8 @@ var bodyParser = require("body-parser");
 
 var dataModule = require("./modules/serverDataModule.js");
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-}) 
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req,res)=>{
     res.redirect("/games");
 })
