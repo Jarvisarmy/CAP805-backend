@@ -45,6 +45,17 @@ module.exports.addGame = function(gameData) {
         })
     });
 };
+module.exports.deleteGameByNum=function(gameNum) {
+    return new Promise((resolve,reject)=> {
+        Game.destroy({
+            where:{gameNum: gameNum}
+        }).then(()=>{
+            resolve();
+        }).catch(err=>{
+            reject();
+        });
+    });
+}
 
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
