@@ -32,12 +32,13 @@ module.exports.getAllGames = function() {
 // function used to add a game
 module.exports.addGame = function(gameData) {
     return new Promise((resolve, reject) => {
-        for (let item in gameData) {
-            if (gameData[item] == "") {
-                gameData[item] = null;
+        const newGame = JSON.parse(gameData);
+        for (let item in newGame) {
+            if (newGame[item] == "") {
+                newGame[item] = null;
             }
         }
-        Game.create(gameData).then(data=> {
+        Game.create(newGame).then(data=> {
             resolve();
         }).catch(err=> {
             reject('unable to create game');
