@@ -5,7 +5,7 @@ var path = require("path");
 var bodyParser = require("body-parser");
 
 var dataModule = require("./modules/serverDataModule.js");
-
+/*
 app.use(function(req, res, next) {
     // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-
+*/
 app.get("/", (req,res)=>{
     res.redirect("/games");
 })
