@@ -17,13 +17,13 @@ app.get("/", (req,res)=>{
 app.get("/games",(req, res) => {
     dataModule.getAllGames().then((data) => {
         if (data.length > 0) {
-            res.json(data);
+            return res.send(JSON.stringify(data));
         } else {
-            res.json({message: "no results"});
+            return res.send(JSON.stringify({message: "no results"}));
         }
     })
     .catch((err) => {
-        res.json({message: "no results"});
+        return res.send(jSON.stringify({message: "no results"}));
     })
 });
 
