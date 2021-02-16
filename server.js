@@ -7,7 +7,7 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin": "*")
+    res.header("Access-Control-Allow-Origin", "*")
 }) 
 
 app.get("/", (req,res)=>{
