@@ -10,6 +10,7 @@ var dataModule = require("./modules/serverDataModule.js");
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req,res)=>{
     res.redirect("/games");
