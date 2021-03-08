@@ -16,6 +16,7 @@ var Game = sequelize.define('Game',{
     gameName: Sequelize.STRING,
     gameUrl: Sequelize.STRING,
     gameDescription: Sequelize.TEXT
+    // isAdmin: Sequelize.BOOLEAN
 });
 // function used to return all games
 module.exports.getAllGames = function() {
