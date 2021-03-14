@@ -18,6 +18,35 @@ var Game = sequelize.define('Game',{
     gameDescription: Sequelize.TEXT
     // isAdmin: Sequelize.BOOLEAN
 });
+
+var User = sequelize.define('User', {
+    userNum: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    userName: {
+        type:Sequelize.STRING,
+        unique: true,
+        allowNull: false
+    },
+    password: Sequelize.STRING,
+    firstName: Sequelize.STRING,
+    lastName: Sequelize.STRING,
+    email: {
+        type: Sequelize.STRING,
+        unique: true
+    },
+    "isAdmin": Sequelize.BOOLEAN
+});
+User.create({
+    userName:"jarvis",
+    password: "123456",
+    firstName: "jarvis",
+    lastName: "zhang",
+    email: "1102207439zzd@gmail.com",
+    isAdmin: true
+});
 // function used to return all games
 module.exports.getAllGames = function() {
     return new Promise((resolve, reject) => {
