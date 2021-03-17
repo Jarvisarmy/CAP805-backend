@@ -19,6 +19,20 @@ var Game = sequelize.define('Game',{
     // isAdmin: Sequelize.BOOLEAN
 });
 
+var Category = sequelize.define('Category',{
+    categoryId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    categoryName:  {   
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
+    },
+    categoryImage: Sequelize.STRING      
+   });
+
 var User = sequelize.define('User', {
     userNum: {
         type: Sequelize.INTEGER,
@@ -88,6 +102,18 @@ module.exports.deleteGameByNum=function(gameNum) {
     });
 }
 
+
+// function used to return categories
+module.exports.getAllCategories = function() {
+    return new Promise((resolve, reject) => {
+        Category.findAll().then(data=> {
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=> {
+            reject('no results returned');
+        })
+    });
+};
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(()=> {
