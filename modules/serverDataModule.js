@@ -15,8 +15,10 @@ var Game = sequelize.define('Game',{
     },
     gameName: Sequelize.STRING,
     gameUrl: Sequelize.STRING,
-    gameDescription: Sequelize.TEXT
-    // isAdmin: Sequelize.BOOLEAN
+    gameDescription: Sequelize.TEXT,
+    user_id:Sequelize.INTEGER,
+    category_id: Sequelize.STRING
+    // isAdmin: Sequel:ize.BOOLEAN
 });
 
 var Category = sequelize.define('Category',{
@@ -32,6 +34,7 @@ var Category = sequelize.define('Category',{
     },
     categoryImage: Sequelize.STRING      
    });
+   Category.hasMany(Game, {foreignKey: 'categoryId'}); 
 
 var User = sequelize.define('User', {
     userNum: {
@@ -53,6 +56,7 @@ var User = sequelize.define('User', {
     },
     "isAdmin": Sequelize.BOOLEAN
 });
+User.hasMany(Game, {foreignKey: 'userNum'}); 
 User.create({
     userName:"jarvis",
     password: "123456",
@@ -61,6 +65,7 @@ User.create({
     email: "1102207439zzd@gmail.com",
     isAdmin: true
 });
+
 // function used to return all games
 module.exports.getAllGames = function() {
     return new Promise((resolve, reject) => {
