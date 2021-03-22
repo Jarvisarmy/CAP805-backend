@@ -90,6 +90,7 @@ module.exports.addGame = function(newGame) {
         }
         */
         Game.create(newGame).then(data=> {
+            
             resolve();
         }).catch(err=> {
             reject('unable to create game: ');
