@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
-var sequelize = new Sequelize('d4tkh6ejtbp6fk','zsizxunfpcswki','ec32e999218ebd9c5886fce0650ec789dd90627c1db7641fc9c8c76b9dcff8dd',{
-    host: 'ec2-54-90-13-87.compute-1.amazonaws.com',
+var sequelize = new Sequelize('d9bfp8n89d7h2d','pdevmqkvqrkeko','e76470809e0349f6aaacd6d1619362c597b582c9e091d1ae7c5ac3827d810635',{
+    host: 'ec2-23-21-229-200.compute-1.amazonaws.com',
     dialect: 'postgres',
     port: 5432,
     dialectOptions: {
@@ -33,8 +33,8 @@ var Category = sequelize.define('Category',{
         allowNull: false
     },
     categoryImage: Sequelize.STRING      
-   });
-   Category.hasMany(Game, {foreignKey: 'categoryId'}); 
+});
+Category.hasMany(Game, {foreignKey: 'categoryId'}); 
 
 var User = sequelize.define('User', {
     userNum: {
