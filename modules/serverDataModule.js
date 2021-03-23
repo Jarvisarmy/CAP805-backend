@@ -16,8 +16,8 @@ var Game = sequelize.define('Game',{
     gameName: Sequelize.STRING,
     gameUrl: Sequelize.STRING,
     gameDescription: Sequelize.TEXT,
-    user_id:Sequelize.INTEGER,
-    category_id: Sequelize.STRING
+    userNum:Sequelize.INTEGER,
+    categoryId: Sequelize.INTEGER
     // isAdmin: Sequel:ize.BOOLEAN
 });
 
@@ -57,6 +57,7 @@ var User = sequelize.define('User', {
     "isAdmin": Sequelize.BOOLEAN
 });
 User.hasMany(Game, {foreignKey: 'userNum'}); 
+
 User.create({
     userName:"jarvis",
     password: "123456",
@@ -89,6 +90,7 @@ module.exports.addGame = function(newGame) {
         }
         */
         Game.create(newGame).then(data=> {
+            
             resolve();
         }).catch(err=> {
             reject('unable to create game: ');

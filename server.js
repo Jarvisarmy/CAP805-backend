@@ -8,8 +8,13 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
+<<<<<<< HEAD
     //origin: 'http://localhost:3000'
     origin: 'https://still-thicket-95361.herokuapp.com'
+=======
+   // origin: 'http://localhost:3000'
+     origin: 'https://still-thicket-95361.herokuapp.com'
+>>>>>>> 03068fd789f60a72195ddfaf392e553263c7920c
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
