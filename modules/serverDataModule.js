@@ -78,6 +78,21 @@ module.exports.getAllGames = function() {
         })
     });
 };
+// function returns games by userNum
+module.exports.getGamesByUser = function(num) {
+    return new Promise((resolve, reject)=>{
+        Game.findAll({
+            where: {
+                userNum: num
+            }
+        }).then(data=>{
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=>{
+            reject('no results returned');
+        })
+    });
+}
 
 // function used to add a game
 module.exports.addGame = function(newGame) {

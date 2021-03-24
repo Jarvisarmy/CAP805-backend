@@ -8,13 +8,8 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-<<<<<<< HEAD
-    //origin: 'http://localhost:3000'
-    origin: 'https://still-thicket-95361.herokuapp.com'
-=======
-   // origin: 'http://localhost:3000'
-     origin: 'https://still-thicket-95361.herokuapp.com'
->>>>>>> 03068fd789f60a72195ddfaf392e553263c7920c
+    origin: 'http://localhost:3000'
+    //origin: 'https://still-thicket-95361.herokuapp.com'
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -25,16 +20,29 @@ app.get("/", (req,res)=>{
 
 
 app.get("/games",(req, res) => {
-    dataModule.getAllGames().then((data) => {
-        if (data.length > 0) {
-            return res.json(data);
-        } else {
+    if (req.query.user) {
+        dataModule.getGamesByUser(req.query.user).then((data)=>{
+            if (data.length > 0) {
+                return res.json(data);
+            } else {
+                return res.json([]);
+            }
+        })
+        .catch((err)=>{
             return res.json([]);
-        }
-    })
-    .catch((err) => {
-        return res.json([]);
-    })
+        })
+    } else {
+        dataModule.getAllGames().then((data) => {
+            if (data.length > 0) {
+                return res.json(data);
+            } else {
+                return res.json([]);
+            }
+        })
+        .catch((err) => {
+            return res.json([]);
+        })
+    }
 });
 
 app.post("/games/add", (req, res) => {
