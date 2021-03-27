@@ -83,6 +83,14 @@ app.post("/loginPage", (req, res) => {
     });
 }); */
 
+app.post("/signupPage", (req, res) => {
+    console.log(req.body);
+    dataModule.addUser(req.body).then(()=> {
+    }).catch(err=>{
+        res.status(500).send(err);
+    });
+});
+
 app.use((req, res, next) => {
     res.status(404).send("Page Not Found");
 });
