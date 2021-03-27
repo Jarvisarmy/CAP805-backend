@@ -94,6 +94,33 @@ module.exports.getGamesByUser = function(num) {
     });
 }
 
+// function used to find user
+module.exports.getUser = function(user){
+    return new Promise((resolve,reject)=>{
+        
+        User.findAll({
+            where: {
+              userName: user
+            }
+          }).then(data=>{
+              data = data.map(value=>value.dataValues);
+              resolve(data);
+          }).catch(err=>{
+              reject("No user by that name");
+        })
+    });
+}
+
+//function used to add a user
+module.exports.addUser = function(newUser) {
+    return new Promise((resolve, reject) => {
+        User.create(newUser).then(resolve()).catch(err=> {
+            reject('unable to create game: ');
+        })
+    });
+};     
+    
+
 // function used to add a game
 module.exports.addGame = function(newGame) {
     return new Promise((resolve, reject) => {
