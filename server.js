@@ -51,6 +51,7 @@ app.post("/games/add", (req, res) => {
         res.status(500).send(err);
     });
 });
+
 app.get("/games/delete/:gameNum",(req,res)=> {
     dataModule.deleteGameByNum(req.params.gameNum).then((data)=>{
     }).catch(err=>{
@@ -72,6 +73,40 @@ app.get("/categories",(req, res) => {
 });
 app.post("/games/addRate", (req, res) => {
     dataModule.addRating(req.body).then(()=> {
+    }).catch(err=>{
+        res.status(500).send(err);
+    });
+});
+
+//finding user login data
+app.post("/loginPage", (req, res) => {
+    const username = req.body.userName;
+    const password = req.body.password;
+    if (username === "" || password === "" ){
+        //return res.render("login", {errorMsg: "Both fields are required!", user: req.session.user})
+        return res.json("login", {errorMsg: "Both fields are required!"})
+    }
+    dataModule.getUser(username).then((data)=>{
+        console.log(data);
+        return res.json(data);
+        
+    }).catch((err)=>{
+        res.status(500).send(err);
+    })  
+});
+
+//creating a new user
+/* app.post("/login/add", (req, res) => {
+    dataModule.addGame(req.body).then(()=> {
+        res.json("succesfully created a new user")
+    }).catch(err=>{
+        res.status(500).send(err);
+    });
+}); */
+
+app.post("/signupPage", (req, res) => {
+    console.log(req.body);
+    dataModule.addUser(req.body).then(()=> {
     }).catch(err=>{
         res.status(500).send(err);
     });
