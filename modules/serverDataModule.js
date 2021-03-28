@@ -21,6 +21,7 @@ var Game = sequelize.define('Game',{
     // isAdmin: Sequel:ize.BOOLEAN
 });
 
+
 var Category = sequelize.define('Category',{
     categoryId: {
         type: Sequelize.INTEGER,
@@ -35,6 +36,17 @@ var Category = sequelize.define('Category',{
     categoryImage: Sequelize.STRING      
 });
 Category.hasMany(Game, {foreignKey: 'categoryId'}); 
+
+var GameRating = sequelize.define('Rating',{
+    RatingId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    gameNum: Sequelize.INTEGER,
+    rating: Sequelize.FLOAT,
+    userNum:Sequelize.INTEGER  
+});
 
 var User = sequelize.define('User', {
     userNum: {
@@ -133,6 +145,24 @@ module.exports.getAllCategories = function() {
             resolve(data);
         }).catch(err=> {
             reject('no results returned');
+        })
+    });
+};
+// function used to add a rating
+module.exports.addRating = function(newRating) {
+    return new Promise((resolve, reject) => {
+        /*
+        for (let item in newGame) {
+            if (newGame[item] == "") {
+                newGame[item] = null;
+            }
+        }
+        */
+        GameRating.create(newRating).then(data=> {
+            
+            resolve();
+        }).catch(err=> {
+            reject('unable to create rating: ');
         })
     });
 };
