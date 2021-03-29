@@ -8,7 +8,7 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-   // origin: 'http://localhost:3000'
+  //  origin: 'http://localhost:3000'
     origin: 'https://still-thicket-95361.herokuapp.com'
 }));
 app.use(bodyParser.json());
