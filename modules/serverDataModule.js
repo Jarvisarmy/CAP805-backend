@@ -17,8 +17,11 @@ var Game = sequelize.define('Game',{
     gameUrl: Sequelize.STRING,
     gameDescription: Sequelize.TEXT,
     userNum:Sequelize.INTEGER,
-    categoryId: Sequelize.INTEGER
-    // isAdmin: Sequel:ize.BOOLEAN
+    categoryId: Sequelize.INTEGER,
+    isApproved: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    }
 });
 
 
@@ -36,7 +39,22 @@ var Category = sequelize.define('Category',{
     categoryImage: Sequelize.STRING      
 });
 Category.hasMany(Game, {foreignKey: 'categoryId'}); 
-
+Category.create({
+    categoryName: "adventure",
+    categoryImage: "/img/adventure.jpeg"
+});
+Category.create({
+    categoryName: "action",
+    categoryImage: "/img/action.jpg"
+});
+Category.create({
+    categoryName: "shooter",
+    categoryImage: "/img/shooter.jpg"
+});
+Category.create({
+    categoryName: "strategy",
+    categoryImage: "/img/strategy.jpg"
+});
 var GameRating = sequelize.define('Rating',{
     RatingId: {
         type: Sequelize.INTEGER,
