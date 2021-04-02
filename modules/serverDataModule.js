@@ -123,6 +123,20 @@ module.exports.getGamesByUser = function(num) {
         })
     });
 }
+module.exports.getGameById = function(id) {
+    return new Promise((resolve, reject) =>{
+        Game.findAll({
+            where: {
+                gameNum: id
+            }
+        }).then(data=>{
+            data = data.map(value=>value.dataValues);
+            resolve(data[0]);
+        }).catch(err=>{
+            reject('no results returned');
+        })
+    });
+}
 
 // function used to find user
 module.exports.getUser = function(user){

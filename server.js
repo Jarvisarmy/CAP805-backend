@@ -44,7 +44,14 @@ app.get("/games",(req, res) => {
         })
     }
 });
-
+app.get("/game/:id",(req,res)=>{
+    dataModule.getGameById(req.params.id).then((data)=>{
+        return res.json(data);
+    })
+    .catch((err)=>{
+        return res.json({});
+    })
+});
 app.post("/games/add", (req, res) => {
     dataModule.addGame(req.body).then(()=> {
     }).catch(err=>{
