@@ -84,6 +84,8 @@ var User = sequelize.define('User', {
         type: Sequelize.STRING,
         unique: true
     },
+    phoneNum: Sequelize.STRING,
+    address: Sequelize.STRING,
     "isAdmin": Sequelize.BOOLEAN
 });
 User.hasMany(Game, {foreignKey: 'userNum'}); 
@@ -94,6 +96,8 @@ User.create({
     firstName: "jarvis",
     lastName: "zhang",
     email: "1102207439zzd@gmail.com",
+    phoneNum: "3442322342",
+    address: "130 columbia st, west",
     isAdmin: true
 });
 
@@ -183,6 +187,26 @@ module.exports.addGame = function(newGame) {
         })
     });
 };
+
+module.exports.updateUserInfo = function(user) {
+    return new Promise((resolve, reject) => {
+        var temp = {};
+        temp.firstName = user.firstName;
+        temp.lastName = user.lastName;
+        temp.email = user.email;
+        temp.phoneNum = user.phoneNum;
+        temp.address = user.address;
+        User.update(temp,{
+            where: {
+            userName: user.userName,
+            password: user.password
+        }}).then(data=> {
+            resolve();
+        }).catch(err=>{
+            reject('unable to update user');
+        })
+    })
+}
 module.exports.deleteGameByNum=function(gameNum) {
     return new Promise((resolve,reject)=> {
         Game.destroy({

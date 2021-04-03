@@ -8,8 +8,8 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-    //origin: 'http://localhost:3000'
-    origin: 'https://still-thicket-95361.herokuapp.com'
+    origin: 'http://localhost:3000'
+    //origin: 'https://still-thicket-95361.herokuapp.com'
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -118,6 +118,14 @@ app.post("/signupPage", (req, res) => {
         res.status(500).send(err);
     });
 });
+app.post("/users",(req,res)=>{
+    console.log(req.body);
+    dataModule.updateUserInfo(req.body).then(()=> {
+        res.json({statu:"success",msg:"successfully update user infomation"});
+    }).catch(err=>{
+        res.json({statu:"fail",msg:"unable to update the user information"});
+    });
+})
 
 app.use((req, res, next) => {
     res.status(404).send("Page Not Found");
