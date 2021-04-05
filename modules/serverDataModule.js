@@ -170,21 +170,46 @@ module.exports.addUser = function(newUser) {
     
 
 // function used to add a game
+module.exports.checkGameExist = function(newGame) {
+
+}
 module.exports.addGame = function(newGame) {
     return new Promise((resolve, reject) => {
-        /*
-        for (let item in newGame) {
-            if (newGame[item] == "") {
-                newGame[item] = null;
+        Game.findAll({
+            where: {
+                gameName: newGame.gameName
             }
-        }
-        */
-        Game.create(newGame).then(data=> {
-            
-            resolve();
-        }).catch(err=> {
-            reject('unable to create game: ');
+        }).then(data=>{
+            data = data.map(value=>value.dataValues);
+            if (data.length !== 0) {
+                reject("namefail");
+                
+            } else {
+                Game.findAll({
+                    where: {
+                        gameUrl: newGame.gameUrl
+                    }
+                }).then(data=>{
+                    data = data.map(value=>value.dataValues);
+                    if (data.length !== 0) {
+                        reject("urlfail");
+                        
+                    } else {
+                        Game.create(newGame).then(data=> {
+                            resolve("success");
+                        }).catch(err=> {
+                            reject('other');
+                        })
+                    }
+                }).catch(err=>{
+                    reject("other");
+                })
+            }
+        }).catch(err=>{
+            reject("other");
         })
+        
+            
     });
 };
 

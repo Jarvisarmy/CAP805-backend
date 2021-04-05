@@ -53,9 +53,10 @@ app.get("/game/:id",(req,res)=>{
     })
 });
 app.post("/games/add", (req, res) => {
-    dataModule.addGame(req.body).then(()=> {
+    dataModule.addGame(req.body).then((res)=> {
+        return res.json(res);
     }).catch(err=>{
-        res.status(500).send(err);
+        return res.json(err);
     });
 });
 
