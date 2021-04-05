@@ -8,7 +8,7 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-    //origin: 'http://localhost:3000'
+ //   origin: 'http://localhost:3000'
     origin: 'https://still-thicket-95361.herokuapp.com'
 }));
 app.use(bodyParser.json());
@@ -84,6 +84,32 @@ app.post("/games/addRate", (req, res) => {
     }).catch(err=>{
         res.status(500).send(err);
     });
+});
+
+
+app.get("/rate/:id",(req,res)=>{
+    dataModule.getAvgRatingByGameId(req.params.id).then((data)=>{
+        return res.json(data);
+    })
+    .catch((err)=>{
+        return res.json({});
+    })
+});
+
+
+
+app.get("/ratings",(req, res) => {
+    dataModule.getAllRates().then((data) => {
+        if (data.length > 0) {
+            return res.json(data);
+        } else {
+            return res.json([]);
+        }
+     
+    })
+    .catch((err) => {
+        return res.json([]);
+    })
 });
 
 //finding user login data
