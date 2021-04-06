@@ -112,6 +112,19 @@ module.exports.getAllGames = function() {
         })
     });
 };
+
+
+module.exports.getAllUsers = function() {
+    return new Promise((resolve, reject) => {
+        User.findAll().then(data=> {
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=> {
+            reject('no results returned');
+        })
+    });
+};
+
 // function returns games by userNum
 module.exports.getGamesByUser = function(num) {
     return new Promise((resolve, reject)=>{
@@ -244,6 +257,18 @@ module.exports.deleteGameByNum=function(gameNum) {
     });
 }
 
+module.exports.deleteUserByNum=function(Num) {
+    return new Promise((resolve,reject)=> {
+        User.destroy({
+            where:{userNum: Num}
+        }).then(()=>{
+            resolve();
+        }).catch(err=>{
+            reject();
+        });
+    });
+}
+
 
 // function used to return categories
 module.exports.getAllCategories = function() {
@@ -274,6 +299,39 @@ module.exports.addRating = function(newRating) {
         })
     });
 };
+
+//Get all unapproved games
+module.exports.getUnApprovedGames = function() {
+    return new Promise((resolve, reject)=>{
+        Game.findAll({
+            where: {
+                isApproved: false
+            }
+        }).then(data=>{
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=>{
+            reject('no results returned');
+        })
+    });
+}
+
+//approve games
+module.exports.approveGames = function(num){
+    return new Promise((resolve, reject) => {
+         
+
+        Game.update({isApproved : true},{
+            where: {
+            gameNum: num
+        }}).then(data=> {
+            resolve();
+        }).catch(err=>{
+            reject('unable to approve game');
+        })
+    }) 
+}
+
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(()=> {

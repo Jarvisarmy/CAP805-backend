@@ -8,8 +8,8 @@ var bodyParser = require("body-parser");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-    //origin: 'http://localhost:3000'
-    origin: 'https://still-thicket-95361.herokuapp.com'
+    origin: 'http://localhost:3000'
+    //origin: 'https://still-thicket-95361.herokuapp.com'
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -44,6 +44,8 @@ app.get("/games",(req, res) => {
         })
     }
 });
+
+
 app.get("/game/:id",(req,res)=>{
     dataModule.getGameById(req.params.id).then((data)=>{
         return res.json(data);
@@ -115,18 +117,64 @@ app.post("/loginPage", (req, res) => {
 app.post("/signupPage", (req, res) => {
     console.log(req.body);
     dataModule.addUser(req.body).then(()=> {
+        res.json({status:"success",msg:"successfully created new user"});
     }).catch(err=>{
-        res.status(500).send(err);
+        res.json({status:"fail",msg:"unable to create the user"});
     });
 });
 app.post("/users",(req,res)=>{
     console.log(req.body);
     dataModule.updateUserInfo(req.body).then(()=> {
-        res.json({statu:"success",msg:"successfully update user infomation"});
+        res.json({status:"success",msg:"successfully update user infomation"});
     }).catch(err=>{
-        res.json({statu:"fail",msg:"unable to update the user information"});
+        res.json({status:"fail",msg:"unable to update the user information"});
     });
 })
+
+app.get("/adminPage",(req, res) => {
+    dataModule.getUnApprovedGames().then((data) => {
+        if (data.length > 0) {
+            return res.json(data);
+        } else {
+            return res.json([]);
+        }
+    })
+    .catch((err) => {
+        return res.json([err]);
+    })
+});
+
+
+
+app.get("/adminPage/users",(req, res) => {
+    dataModule.getAllUsers().then((data) => {
+        if (data.length > 0) {
+            return res.json(data);
+        } else {
+            return res.json([]);
+        }
+    })
+    .catch((err) => {
+        return res.json([]);
+    })
+});
+
+app.get("/adminPage/delete/:userNum",(req,res)=> {
+    dataModule.deleteUserByNum(req.params.userNum).then((data)=>{
+    }).catch(err=>{
+        res.status(500).send("Unable to Remove User / User not found");
+    })
+});
+
+//approve game
+app.get("/adminPage/:gameNum",(req,res)=> {
+    console.log("approving game...")
+    console.log(req.params.gameNum);
+    dataModule.approveGames(req.params.gameNum).then((data)=>{
+    }).catch(err=>{
+        res.status(500).send("Unable to approve game/ game not found");
+    });
+});
 
 app.use((req, res, next) => {
     res.status(404).send("Page Not Found");
