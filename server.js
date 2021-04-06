@@ -88,6 +88,32 @@ app.post("/games/addRate", (req, res) => {
     });
 });
 
+
+app.get("/rate/:id",(req,res)=>{
+    dataModule.getAvgRatingByGameId(req.params.id).then((data)=>{
+        return res.json(data);
+    })
+    .catch((err)=>{
+        return res.json({});
+    })
+});
+
+
+
+app.get("/ratings",(req, res) => {
+    dataModule.getAllRates().then((data) => {
+        if (data.length > 0) {
+            return res.json(data);
+        } else {
+            return res.json([]);
+        }
+     
+    })
+    .catch((err) => {
+        return res.json([]);
+    })
+});
+
 //finding user login data
 app.post("/loginPage", (req, res) => {
     const username = req.body.userName;

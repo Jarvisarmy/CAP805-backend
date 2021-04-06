@@ -18,6 +18,7 @@ var Game = sequelize.define('Game',{
     gameDescription: Sequelize.TEXT,
     userNum:Sequelize.INTEGER,
     categoryId: Sequelize.INTEGER,
+    rating:Sequelize.FLOAT,
     isApproved: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
@@ -38,23 +39,30 @@ var Category = sequelize.define('Category',{
     },
     categoryImage: Sequelize.STRING      
 });
+/*
 Category.hasMany(Game, {foreignKey: 'categoryId'}); 
 Category.create({
     categoryName: "adventure",
     categoryImage: "/img/adventure.jpeg"
-});
+}).then(res=>console.log(res))
+.catch(err=>console.log(err));
 Category.create({
     categoryName: "action",
     categoryImage: "/img/action.jpg"
-});
+}).then(res=>console.log(res))
+.catch(err=>console.log(err));
 Category.create({
     categoryName: "shooter",
     categoryImage: "/img/shooter.jpg"
-});
+}).then(res=>console.log(res))
+.catch(err=>console.log(err));
 Category.create({
     categoryName: "strategy",
     categoryImage: "/img/strategy.jpg"
-});
+}).then(res=>console.log(res))
+.catch(err=>console.log(err));
+*/
+
 var GameRating = sequelize.define('Rating',{
     RatingId: {
         type: Sequelize.INTEGER,
@@ -89,7 +97,7 @@ var User = sequelize.define('User', {
     "isAdmin": Sequelize.BOOLEAN
 });
 User.hasMany(Game, {foreignKey: 'userNum'}); 
-
+/*
 User.create({
     userName:"jarvis",
     password: "123456",
@@ -99,8 +107,9 @@ User.create({
     phoneNum: "3442322342",
     address: "130 columbia st, west",
     isAdmin: true
-});
-
+}).then(res=>console.log(res))
+.catch(err=>console.log(err));
+*/
 // function used to return all games
 module.exports.getAllGames = function() {
     return new Promise((resolve, reject) => {
@@ -239,7 +248,7 @@ module.exports.updateUserInfo = function(user) {
             userName: user.userName,
             password: user.password
         }}).then(data=> {
-            resolve();
+            resolve("update user info successfully");
         }).catch(err=>{
             reject('unable to update user');
         })
@@ -283,16 +292,9 @@ module.exports.getAllCategories = function() {
 };
 // function used to add a rating
 module.exports.addRating = function(newRating) {
-    return new Promise((resolve, reject) => {
-        /*
-        for (let item in newGame) {
-            if (newGame[item] == "") {
-                newGame[item] = null;
-            }
-        }
-        */
+    return new Promise((resolve, reject) => {       
         GameRating.create(newRating).then(data=> {
-            
+            calculateRate(newRating.gameNum);
             resolve();
         }).catch(err=> {
             reject('unable to create rating: ');
@@ -306,6 +308,50 @@ module.exports.getUnApprovedGames = function() {
         Game.findAll({
             where: {
                 isApproved: false
+            }
+        }).then(data=>{
+            data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=>{
+            reject("no unapproved games found")
+        })
+
+const calculateRate = (gameNum)=>{
+  //  console.log("Calculate Method*****gameNum:"+ gameNum);
+    this.getAvgRatingByGameId(gameNum).then((data)=>{
+        var newGameRate = data;
+    //    console.log("Calculate Method***** newGameRate in Game"+ JSON.stringify(newGameRate));
+
+        this.getGameById(gameNum).then((data)=>{
+            var game = data;
+          game.rating =newGameRate[0].rating;
+    //        console.log("Calculate Method***** updated Game"+ JSON.stringify(game));
+            this.updateGameRating(game).then(()=>{                
+                console.log("***** Game updated in datbase");  
+          })
+            .catch((err)=>{
+                return res.json({});
+            })
+        })
+        .catch((err)=>{
+            return res.json({});
+        })
+
+    })
+    .catch((err)=>{
+        return res.json({});
+    })
+ //   console.log("Calculate Method***** Updated Rating in Game"+ JSON.stringify(game));
+
+}
+
+
+module.exports.getRatingByGameId = function(id) {
+    return new Promise((resolve, reject) =>{
+        
+        GameRating.findAll({
+            where: {
+                gameNum: id
             }
         }).then(data=>{
             data = data.map(value=>value.dataValues);
@@ -331,6 +377,56 @@ module.exports.approveGames = function(num){
         })
     }) 
 }
+
+module.exports.getAvgRatingByGameId = function(id) {
+    return new Promise((resolve, reject) =>{
+        
+        GameRating.findAll({
+            attributes: [             
+                [Sequelize.fn('AVG', Sequelize.col('rating')), 'rating'],
+           ],
+               where: {
+                gameNum: id
+            }
+        }).then(data=>{
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+           // console.log("Ratings:"+JSON.stringify(data));
+        }).catch(err=>{
+            reject('no results returned');
+        })
+    });
+}
+
+module.exports.updateGameRating = function(data){
+    return new Promise(function (resolve, reject) { 
+         
+                 Game.update(data, {
+                where: {
+                    gameNum: data.gameNum
+                }
+               
+            }).then(data=>{
+                resolve(`Rating for Game  id: ${data.gameNum} successfully updated`);
+            }).catch(err=>{
+                reject(err);
+            });
+        
+       });
+
+ }
+
+module.exports.getAllRates = function() {
+    return new Promise((resolve, reject) => {
+        GameRating.findAll().then(data=> {
+            data = data.map(value=>value.dataValues);
+         
+            resolve(data);
+        }).catch(err=> {
+            reject('no results returned');
+        })
+    });
+};
 
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
