@@ -315,6 +315,8 @@ module.exports.getUnApprovedGames = function() {
         }).catch(err=>{
             reject("no unapproved games found")
         })
+    })
+};
 
 const calculateRate = (gameNum)=>{
   //  console.log("Calculate Method*****gameNum:"+ gameNum);
@@ -375,7 +377,7 @@ module.exports.approveGames = function(num){
         }).catch(err=>{
             reject('unable to approve game');
         })
-    }) 
+    });
 }
 
 module.exports.getAvgRatingByGameId = function(id) {
@@ -396,7 +398,7 @@ module.exports.getAvgRatingByGameId = function(id) {
             reject('no results returned');
         })
     });
-}
+};
 
 module.exports.updateGameRating = function(data){
     return new Promise(function (resolve, reject) { 
@@ -414,7 +416,7 @@ module.exports.updateGameRating = function(data){
         
        });
 
- }
+ };
 
 module.exports.getAllRates = function() {
     return new Promise((resolve, reject) => {
