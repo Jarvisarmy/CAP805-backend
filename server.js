@@ -4,21 +4,53 @@ var app = express();
 var path = require("path");
 var cors = require('cors');
 var bodyParser = require("body-parser");
-
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
     //origin: 'https://still-thicket-95361.herokuapp.com'
+    credentials: true,
+    methods : ["GET", "POST", "DELETE", "PUT"]
 }));
+
+app.use(cookieParser());
+
+app.use(session({
+    key : "userId",
+    secret: "teamFalcon",
+    resave: false,
+    saveUninitialized : false,
+    cookie: {
+        expires : 1000*60*24,
+    }
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req,res)=>{
     res.redirect("/games");
 })
 
+//Functions
+function ensureLogin(req, res, next) {
+    if (req.session.user) {
+        res.redirect("/loginPage");
+    } else {
+        next();
+    }
+}
 
+function ensureAdmin(req, res, next) {
+    if (!req.session.user.isAdmin) {
+        res.redirect("/loginPage")
+    } else {
+        next();
+    }
+}
 
+//Routes
 app.get("/games",(req, res) => {
     if (req.query.user) {
         dataModule.getGamesByUser(req.query.user).then((data)=>{
@@ -81,6 +113,8 @@ app.get("/categories",(req, res) => {
         return res.json([]);
     })
 });
+
+
 app.post("/games/addRate", (req, res) => {
     dataModule.addRating(req.body).then(()=> {
     }).catch(err=>{
@@ -118,18 +152,35 @@ app.get("/ratings",(req, res) => {
 app.post("/loginPage", (req, res) => {
     const username = req.body.userName;
     const password = req.body.password;
-    if (username === "" || password === "" ){
-        //return res.render("login", {errorMsg: "Both fields are required!", user: req.session.user})
-        return res.json("login", {errorMsg: "Both fields are required!"})
-    }
+
     dataModule.getUser(username).then((data)=>{
-        console.log(data);
-        return res.json(data);
+        //console.log(data);
+        //console.log(data.password);
+        if(data[0].userName === username && data[0].password === password){
+            req.session.user = data[0];
+            console.log("session info:")
+            console.log(req.session.user);
+            return res.json(req.session.user);
+            
+        }
+        else{
+            console.log("didn't make it")
+            return res.json({message: "wrong username or password"});
+        }
         
     }).catch((err)=>{
         res.status(500).send(err);
     })  
 });
+
+app.get("/login", (req,res)=>{
+    if (req.session.user){
+        return res.json({loggedIn: true, user: req.session.user});
+    }
+    else{
+       return res.json({loggedIn : false});
+    }
+})
 
 //creating a new user
 /* app.post("/login/add", (req, res) => {
@@ -148,6 +199,7 @@ app.post("/signupPage", (req, res) => {
         res.json({status:"fail",msg:"unable to create the user"});
     });
 });
+
 app.post("/users",(req,res)=>{
     console.log(req.body);
     dataModule.updateUserInfo(req.body).then(()=> {
@@ -201,6 +253,10 @@ app.get("/adminPage/:gameNum",(req,res)=> {
         res.status(500).send("Unable to approve game/ game not found");
     });
 });
+
+app.get("/logout", (req,res)=>{
+    req.session.destroy;
+})
 
 app.use((req, res, next) => {
     res.status(404).send("Page Not Found");
