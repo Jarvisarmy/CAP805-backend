@@ -153,6 +153,9 @@ app.post("/loginPage", (req, res) => {
     const username = req.body.userName;
     const password = req.body.password;
 
+    if(username === "" || password === ""){
+        return res.status(404).send("Empty User or Password");
+    }
     dataModule.getUser(username).then((data)=>{
         //console.log(data);
         //console.log(data.password);
