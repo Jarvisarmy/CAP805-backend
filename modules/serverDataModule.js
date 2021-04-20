@@ -295,7 +295,7 @@ module.exports.addRating = function(newRating) {
     return new Promise((resolve, reject) => {       
         GameRating.create(newRating).then(data=> {
             calculateRate(newRating.gameNum);
-            resolve();
+           
         }).catch(err=> {
             reject('unable to create rating: ');
         })
@@ -330,6 +330,7 @@ const calculateRate = (gameNum)=>{
     //        console.log("Calculate Method***** updated Game"+ JSON.stringify(game));
             this.updateGameRating(game).then(()=>{                
                 console.log("***** Game updated in datbase");  
+                return game;
           })
             .catch((err)=>{
                 return res.json({});
@@ -429,6 +430,22 @@ module.exports.getAllRates = function() {
         })
     });
 };
+
+
+module.exports.getGameByCategory = function(id) {
+    return new Promise((resolve, reject) =>{
+        Game.findAll({
+            where: {
+                categoryId: id,
+            }
+        }).then(data=>{
+            data = data.map(value=>value.dataValues);
+            resolve(data);
+        }).catch(err=>{
+            reject('no results returned');
+        })
+    });
+}
 
 module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
