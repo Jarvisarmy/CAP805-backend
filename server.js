@@ -7,6 +7,7 @@ var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 var dataModule = require("./modules/serverDataModule.js");
+const { Cookie } = require("express-session");
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -257,8 +258,27 @@ app.get("/adminPage/:gameNum",(req,res)=> {
     });
 });
 
+// app.get("/logout", (req,res)=>{
+//     console.log("request received");
+//     console.log(req.session);
+//     if (req.session) {
+//         req.session.destroy(function() {
+//             res.clearCookie('connect.sid', { path: '/' });
+//             res.send('removed session', 200);
+//         });
+//     } else {
+//         res.send('no session assigned', 500);
+//     }
+    
+// })
+
 app.get("/logout", (req,res)=>{
-    req.session.destroy;
+    console.log(Cookie);
+    req.session.destroy();
+    console.log("after destroyed");
+    console.log(req.session);
+    cookie.expires(0);
+    console.log(session.cookie);
 })
 
 app.use((req, res, next) => {
