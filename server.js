@@ -133,6 +133,16 @@ app.get("/rate/:id",(req,res)=>{
     })
 });
 
+//to get game based on category
+app.get("/games/category/:id",(req,res)=>{
+    dataModule.getGameByCategory(req.params.id).then((data)=>{
+        return res.json(data);
+    })
+    .catch((err)=>{
+        return res.json({});
+    })
+});
+
 
 
 app.get("/ratings",(req, res) => {
