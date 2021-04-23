@@ -10,8 +10,9 @@ var dataModule = require("./modules/serverDataModule.js");
 const { rejects } = require("assert");
 const FIVE_MINUTES = 1000*60*5;
 app.use(cors({
-    //origin: 'http://localhost:3000',
-    origin: 'https://still-thicket-95361.herokuapp.com',
+    
+    origin: 'http://localhost:3000',
+    //origin: 'https://still-thicket-95361.herokuapp.com',
     credentials: true,
     methods : ["GET", "POST", "DELETE", "PUT"]
 }));
@@ -22,12 +23,27 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+//for localhost use this session
+
+// app.use(session({
+//     key : "userId",
+//     secret: "teamFalcon",
+//     resave: false,
+//     saveUninitialized : false,
+//     cookie: {
+//         maxAge: FIVE_MINUTES
+//     }
+// }));
+
+//for deployment use this
 app.use(session({
     key : "userId",
     secret: "teamFalcon",
     resave: false,
+    proxy: true,
     saveUninitialized : false,
     cookie: {
+        secure: true,
         maxAge: FIVE_MINUTES
     }
 }));
