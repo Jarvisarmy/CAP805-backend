@@ -7,7 +7,8 @@ var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 var dataModule = require("./modules/serverDataModule.js");
-
+const { rejects } = require("assert");
+const FIVE_MINUTES = 1000*60*5;
 app.use(cors({
     //origin: 'http://localhost:3000',
     origin: 'https://still-thicket-95361.herokuapp.com',
@@ -17,18 +18,20 @@ app.use(cors({
 
 app.use(cookieParser());
 
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(session({
     key : "userId",
     secret: "teamFalcon",
     resave: false,
     saveUninitialized : false,
     cookie: {
-        expires : 1000*60*24,
+        maxAge: FIVE_MINUTES
     }
 }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req,res)=>{
     res.redirect("/games");
 })
@@ -189,6 +192,8 @@ app.post("/loginPage", (req, res) => {
 
 app.get("/login", (req,res)=>{
     if (req.session.user){
+        console.log("check login");
+        console.log(req.session.user);
         return res.json({loggedIn: true, user: req.session.user});
     }
     else{
@@ -268,8 +273,29 @@ app.get("/adminPage/:gameNum",(req,res)=> {
     });
 });
 
+// app.get("/logout", (req,res)=>{
+//     console.log("request received");
+//     console.log(req.session);
+//     if (req.session) {
+//         req.session.destroy(function() {
+//             res.clearCookie('connect.sid', { path: '/' });
+//             res.send('removed session', 200);
+//         });
+//     } else {
+//         res.send('no session assigned', 500);
+//     }
+    
+// })
+
 app.get("/logout", (req,res)=>{
-    req.session.destroy;
+    console.log("logging out");
+    res.clearCookie(req.session.id);
+    console.log(req.session.id);
+    console.log(req.session.cookie.maxAge);
+    
+    req.session.destroy();
+    console.log("after destroyed");
+    console.log(req.session);
 })
 
 app.use((req, res, next) => {
@@ -277,6 +303,7 @@ app.use((req, res, next) => {
 });
 dataModule.initialize().then(() => {
     app.listen(HTTP_PORT, () => {
+        
         console.log("server listening on port: " + HTTP_PORT);
     });
 })
