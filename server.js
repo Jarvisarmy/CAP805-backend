@@ -17,11 +17,11 @@ app.use(cors({
     methods : ["GET", "POST", "DELETE", "PUT"]
 }));
 
-app.use(cookieParser());
 
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 //for localhost use this session
 
