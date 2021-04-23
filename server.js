@@ -9,8 +9,8 @@ const session = require("express-session");
 var dataModule = require("./modules/serverDataModule.js");
 
 app.use(cors({
-    origin: 'http://localhost:3000',
-    //origin: 'https://still-thicket-95361.herokuapp.com'
+    //origin: 'http://localhost:3000',
+    origin: 'https://still-thicket-95361.herokuapp.com',
     credentials: true,
     methods : ["GET", "POST", "DELETE", "PUT"]
 }));
