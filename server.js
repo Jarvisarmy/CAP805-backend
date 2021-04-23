@@ -16,11 +16,11 @@ app.use(cors({
     methods : ["GET", "POST", "DELETE", "PUT"]
 }));
 
-app.use(cookieParser());
 
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(session({
     key : "userId",
@@ -164,8 +164,8 @@ app.get("/ratings",(req, res) => {
 
 //finding user login data
 app.post("/loginPage", (req, res) => {
-    const username = toString(req.body.userName);
-    const password = toString(req.body.password);
+    const username = req.body.userName;
+    const password = req.body.password;
 
     if(username === "" || password === ""){
         return res.status(404).send("Empty User or Password");
