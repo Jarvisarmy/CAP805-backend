@@ -164,8 +164,8 @@ app.get("/ratings",(req, res) => {
 
 //finding user login data
 app.post("/loginPage", (req, res) => {
-    const username = req.body.userName;
-    const password = req.body.password;
+    const username = toString(req.body.userName);
+    const password = toString(req.body.password);
 
     if(username === "" || password === ""){
         return res.status(404).send("Empty User or Password");
