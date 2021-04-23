@@ -96,6 +96,7 @@ app.post("/games/add", (req, res) => {
 
 app.get("/games/delete/:gameNum",(req,res)=> {
     dataModule.deleteGameByNum(req.params.gameNum).then((data)=>{
+        return res.json(data);
     }).catch(err=>{
         res.status(500).send("Unable to Remove Game / Game not found");
     });
