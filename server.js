@@ -10,7 +10,7 @@ var dataModule = require("./modules/serverDataModule.js");
 const { rejects } = require("assert");
 const FIVE_MINUTES = 1000*60*5;
 app.use(cors({
-    //origin: 'http://localhost:3000',
+  //  origin: 'http://localhost:3000',
     origin: 'https://still-thicket-95361.herokuapp.com',
     credentials: true,
     methods : ["GET", "POST", "DELETE", "PUT"]
